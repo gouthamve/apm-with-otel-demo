@@ -28,6 +28,8 @@ exporters:
     tls:
       insecure: true
   logging:
+  loki:
+    endpoint: http://loki:3100/loki/api/v1/push
   prometheus:
     endpoint: "otelcol:9464"
     resource_to_telemetry_conversion:
@@ -35,8 +37,8 @@ exporters:
     enable_open_metrics: true
 processors:
   batch:
-  spanmetrics:
-    metrics_exporter: prometheus
+  # spanmetrics:
+  #   metrics_exporter: prometheus
   # temporary measure until description is fixed in .NET
   transform:
     metric_statements:
@@ -49,18 +51,28 @@ processors:
         match_type: strict
         metric_names:
           - queueSize
+  
+  resource:
+    attributes:
+      - action: insert
+        key: loki.resource.labels
+        value: service.name
+
+connectors:
+  spanmetrics:
+    namespace: traces.span.metrics
 
 service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [spanmetrics, batch]
-      exporters: [otlp, logging]
+      processors: [batch]
+      exporters: [otlp, logging, spanmetrics]
     metrics:
-      receivers: [otlp]
+      receivers: [otlp, spanmetrics]
       processors: [filter, transform, batch]
-      exporters: [prometheus, logging]
+      exporters: [prometheus]
     logs:
       receivers: [otlp]
-      processors: [batch]
-      exporters: [logging]
+      processors: [batch, resource]
+      exporters: [loki]

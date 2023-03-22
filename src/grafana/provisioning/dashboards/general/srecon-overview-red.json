@@ -1,0 +1,305 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "Spanmetrics way of demo application view.",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "webstore-metrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "displayMode": "auto",
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "error rps"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percentunit"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "99%ile"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "ms"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "service_name"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "title": "",
+                      "url": "/d/-eCKTIf4k/service-details?orgId=1&var-service=${__value.raw}﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 19,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 2,
+        "options": {
+          "footer": {
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "9.1.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "webstore-metrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by (service_name) (rate(traces_span_metrics_calls{service_name=~\"$service\", telemetry_sdk_language=~\"$lang\"}[$__rate_interval]))",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "webstore-metrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by (service_name) (rate(traces_span_metrics_calls{service_name=~\"$service\", status_code=\"STATUS_CODE_ERROR\", telemetry_sdk_language=~\"$lang\"}[$__rate_interval])) / sum by (service_name) (rate(traces_span_metrics_calls{service_name=~\"$service\", telemetry_sdk_language=~\"$lang\"}[$__rate_interval]))",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "webstore-metrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "histogram_quantile(0.99, sum by (le, service_name) (rate(traces_span_metrics_duration_bucket{service_name=~\"$service\", telemetry_sdk_language=~\"$lang\"}[$__rate_interval])))",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "webstore-metrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "count by (telemetry_sdk_language, service_name) (traces_span_metrics_calls{service_name=~\"$service\", telemetry_sdk_language=~\"$lang\"})",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "D"
+          }
+        ],
+        "title": "Panel Title",
+        "transformations": [
+          {
+            "id": "seriesToColumns",
+            "options": {
+              "byField": "service_name"
+            }
+          },
+          {
+            "id": "filterFieldsByName",
+            "options": {
+              "include": {
+                "names": [
+                  "service_name",
+                  "Value #A",
+                  "Value #B",
+                  "Value #C",
+                  "telemetry_sdk_language"
+                ]
+              }
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "indexByName": {
+                "Value #A": 3,
+                "Value #B": 4,
+                "Value #C": 2,
+                "service_name": 0,
+                "telemetry_sdk_language": 1
+              },
+              "renameByName": {
+                "Value #A": "rps",
+                "Value #B": "error rps",
+                "Value #C": "99%ile",
+                "telemetry_sdk_language": "lang"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "refresh": "5m",
+    "schemaVersion": 37,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": false,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "webstore-metrics"
+          },
+          "definition": "query_result(count by (service_name)(count_over_time(traces_span_metrics_calls[$__range])))",
+          "hide": 0,
+          "includeAll": true,
+          "multi": true,
+          "name": "service",
+          "options": [],
+          "query": {
+            "query": "query_result(count by (service_name)(count_over_time(traces_span_metrics_calls[$__range])))",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 2,
+          "regex": "/.*service_name=\"(.*)\".*/",
+          "skipUrlSync": false,
+          "sort": 1,
+          "type": "query"
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": true,
+            "text": [
+              "All"
+            ],
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "webstore-metrics"
+          },
+          "definition": "query_result(count by (telemetry_sdk_language)(count_over_time(traces_span_metrics_calls[$__range])))",
+          "hide": 0,
+          "includeAll": true,
+          "multi": true,
+          "name": "lang",
+          "options": [],
+          "query": {
+            "query": "query_result(count by (telemetry_sdk_language)(count_over_time(traces_span_metrics_calls[$__range])))",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "/.*telemetry_sdk_language=\"(.*)\".*/",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-15m",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Service Overview RED",
+    "uid": "SgbGm7f4z",
+    "version": 6,
+    "weekStart": ""
+  }
