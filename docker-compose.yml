@@ -577,7 +577,7 @@ services:
   # ********************
   # Jaeger
   jaeger:
-    image: jaegertracing/all-in-one
+    image: jaegertracing/all-in-one:1.43
     container_name: jaeger
     command:
       - "--memory.max-traces"
@@ -589,14 +589,15 @@ services:
     deploy:
       resources:
         limits:
-          memory: 300M
+          memory: 500M
     restart: unless-stopped
     ports:
       - "${JAEGER_SERVICE_PORT}"                    # Jaeger UI
-      - "4317"                           # OTLP gRPC default port
+      - "4317:4317"                           # OTLP gRPC default port
     environment:
       - COLLECTOR_OTLP_ENABLED=true
       - METRICS_STORAGE_TYPE=prometheus
+      - SPAN_STORAGE_TYPE=memory
     logging: *logging
 
   # Grafana
@@ -711,3 +712,14 @@ services:
       - recommendationservice
       - shippingservice
       - quoteservice
+  loki:
+    image: grafana/loki:2.7.0
+    container_name: loki
+    command:
+      - -config.file=/etc/loki/local-config.yaml
+      - -table-manager.retention-period=1d
+      - -table-manager.retention-deletes-enabled=true
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./src/loki/loki.yaml:/etc/loki/local-config.yaml
