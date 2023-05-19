@@ -64,7 +64,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "error rps"
+              "options": "error %"
             },
             "properties": [
               {
@@ -96,7 +96,7 @@
                 "value": [
                   {
                     "title": "",
-                    "url": "/d/seCKIDf4k/apm-demo-service-details?orgId=1&var-service=${__value.raw}﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿"
+                    "url": "/d/seCKIDf4k/apm-demo-service-details?orgId=1&var-service=${__value.raw}"
                   }
                 ]
               }
@@ -160,7 +160,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "histogram_quantile(0.99, sum by (le, service_name) (rate(traces_span_metrics_duration_seconds_bucket{service_name=~\"$service\", telemetry_sdk_language=~\"$lang\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.99, sum by (le, service_name) (rate(traces_span_metrics_duration_milliseconds_bucket{service_name=~\"$service\", telemetry_sdk_language=~\"$lang\"}[$__rate_interval])))",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -229,7 +229,7 @@
       "type": "table"
     }
   ],
-  "refresh": "5m",
+  "refresh": "10s",
   "revision": 1,
   "schemaVersion": 38,
   "style": "dark",
@@ -304,6 +304,6 @@
   "timezone": "",
   "title": "APM DEMO Service List",
   "uid": "SgbGm7f4z",
-  "version": 4,
+  "version": 2,
   "weekStart": ""
 }
