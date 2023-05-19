@@ -1,0 +1,16 @@
+apiVersion: 1
+
+datasources:
+  - name: Tempo
+    type: tempo
+    uid: EbPG8fYoz
+    url: http://noop
+    access: proxy
+    basicAuth: false
+    jsonData:
+      serviceMap:
+        datasourceUid: 'Prometheus'
+      nodeGraph:
+        enabled: true
+      search:
+        hide: true

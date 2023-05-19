@@ -96,7 +96,7 @@
                 "value": [
                   {
                     "title": "",
-                    "url": "/d/-eCKTIf4k/service-details?orgId=1&var-service=${__value.raw}﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿"
+                    "url": "/d/seCKIDf4k/apm-demo-service-details?orgId=1&var-service=${__value.raw}﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿"
                   }
                 ]
               }
@@ -145,7 +145,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (service_name) (rate(traces_span_metrics_calls_total{service_name=~\"$service\", status_code=\"STATUS_CODE_ERROR\", telemetry_sdk_language=~\"$lang\"}[$__rate_interval])) / sum by (service_name) (rate(traces_span_metrics_calls_total{service_name=~\"$service\", telemetry_sdk_language=~\"$lang\"}[$__rate_interval]))",
+          "expr": "(sum by (service_name) (rate(traces_span_metrics_calls_total{service_name=~\"$service\", status_code=\"STATUS_CODE_ERROR\", telemetry_sdk_language=~\"$lang\"}[$__rate_interval])) or 0 * sum by (service_name) (rate(traces_span_metrics_calls_total{service_name=~\"$service\",telemetry_sdk_language=~\"$lang\"}[$__rate_interval])) ) / sum by (service_name) (rate(traces_span_metrics_calls_total{service_name=~\"$service\", telemetry_sdk_language=~\"$lang\"}[$__rate_interval]))",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -219,7 +219,7 @@
             },
             "renameByName": {
               "Value #A": "rps",
-              "Value #B": "error rps",
+              "Value #B": "error %",
               "Value #C": "99%ile",
               "telemetry_sdk_language": "lang"
             }
@@ -304,6 +304,6 @@
   "timezone": "",
   "title": "APM DEMO Service List",
   "uid": "SgbGm7f4z",
-  "version": 1,
+  "version": 4,
   "weekStart": ""
 }
