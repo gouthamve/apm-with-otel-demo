@@ -25,6 +25,8 @@ exporters:
     resource_to_telemetry_conversion:
       enabled: true
     enable_open_metrics: true
+  prometheusremotewrite:
+    endpoint: http://prometheus:9090/api/v1/write
 
 processors:
   batch:
@@ -44,9 +46,8 @@ processors:
 connectors:
   spanmetrics:
     namespace: traces.span.metrics
-
-connectors:
-  spanmetrics:
+    histogram:
+      unit: s
 
 service:
   pipelines:
@@ -57,7 +58,7 @@ service:
     metrics:
       receivers: [otlp, spanmetrics]
       processors: [filter, batch]
-      exporters: [prometheus]
+      exporters: [prometheus, prometheusremotewrite]
     logs:
       receivers: [otlp]
       processors: [batch, resource]
