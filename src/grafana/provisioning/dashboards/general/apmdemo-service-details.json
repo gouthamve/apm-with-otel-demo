@@ -28,6 +28,206 @@
   "liveNow": false,
   "panels": [
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 13,
+      "panels": [],
+      "title": "Overview",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "webstore-metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 1
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "webstore-metrics"
+          },
+          "editorMode": "code",
+          "expr": "sum (rate(traces_span_metrics_calls_total{service_name=\"$service\", span_name=~\"$operation\"}[5m]))",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Requests",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "webstore-metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "dark-red",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": null
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 1
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "webstore-metrics"
+          },
+          "editorMode": "code",
+          "expr": "sum (rate(traces_span_metrics_calls_total{service_name=\"$service\", span_name=~\"$operation\", status_code=\"STATUS_CODE_ERROR\"}[5m])) or 0 * sum (rate(traces_span_metrics_calls_total{service_name=\"$service\", span_name=~\"$operation\"}[5m]))",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Errors",
+      "type": "timeseries"
+    },
+    {
       "datasource": {
         "type": "prometheus",
         "uid": "webstore-metrics"
@@ -90,8 +290,8 @@
       "gridPos": {
         "h": 8,
         "w": 8,
-        "x": 0,
-        "y": 0
+        "x": 16,
+        "y": 1
       },
       "id": 4,
       "options": {
@@ -147,196 +347,6 @@
         }
       ],
       "title": "Duration",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "webstore-metrics"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "reqps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 8,
-        "y": 0
-      },
-      "id": 5,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "webstore-metrics"
-          },
-          "editorMode": "code",
-          "expr": "sum (rate(traces_span_metrics_calls_total{service_name=\"$service\", span_name=~\"$operation\"}[5m]))",
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Requests",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "webstore-metrics"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "reqps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 16,
-        "y": 0
-      },
-      "id": 6,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "webstore-metrics"
-          },
-          "editorMode": "code",
-          "expr": "sum (rate(traces_span_metrics_calls_total{service_name=\"$service\", span_name=~\"$operation\", status_code=\"STATUS_CODE_ERROR\"}[5m])) or 0 * sum (rate(traces_span_metrics_calls_total{service_name=\"$service\", span_name=~\"$operation\"}[5m]))",
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Errors",
       "type": "timeseries"
     },
     {
@@ -453,7 +463,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 9
       },
       "id": 8,
       "options": {
@@ -559,7 +569,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 8
+        "y": 9
       },
       "id": 10,
       "options": {
@@ -629,6 +639,13 @@
               {
                 "id": "unit",
                 "value": "ms"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-yellow",
+                  "mode": "fixed"
+                }
               }
             ]
           },
@@ -641,6 +658,13 @@
               {
                 "id": "unit",
                 "value": "reqps"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-green",
+                  "mode": "fixed"
+                }
               }
             ]
           },
@@ -665,12 +689,19 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "errors"
+              "options": "errors %"
             },
             "properties": [
               {
                 "id": "unit",
-                "value": "reqps"
+                "value": "percentunit"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
               }
             ]
           }
@@ -680,7 +711,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 17
       },
       "id": 11,
       "options": {
@@ -705,10 +736,10 @@
           "editorMode": "code",
           "exemplar": true,
           "expr": "histogram_quantile(0.95, sum by (server, le) (rate(traces_service_graph_request_duration_seconds_bucket{client=\"$service\"}[5m])))",
-          "format": "table",
+          "format": "time_series",
           "legendFormat": "__auto",
           "range": true,
-          "refId": "A"
+          "refId": "95%ile"
         },
         {
           "datasource": {
@@ -717,11 +748,11 @@
           },
           "editorMode": "code",
           "expr": "sum by (server) (rate(traces_service_graph_request_total{client=\"$service\"}[5m]))",
-          "format": "table",
+          "format": "time_series",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
-          "refId": "B"
+          "refId": "rps"
         },
         {
           "datasource": {
@@ -729,16 +760,20 @@
             "uid": "webstore-metrics"
           },
           "editorMode": "code",
-          "expr": "sum by (server) (rate(traces_service_graph_request_total{client=\"$service\", failed=\"true\"}[5m])) or 0 * sum by (server) (rate(traces_service_graph_request_total{client=\"$service\"}[5m]))",
-          "format": "table",
+          "expr": "(sum by (server) (rate(traces_service_graph_request_total{client=\"$service\", failed=\"true\"}[5m])) or 0 * sum by (server) (rate(traces_service_graph_request_total{client=\"$service\"}[5m]))) / sum by (server) (rate(traces_service_graph_request_total{client=\"$service\"}[5m]))",
+          "format": "time_series",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
-          "refId": "C"
+          "refId": "errors %"
         }
       ],
       "title": "Downstream Services",
       "transformations": [
+        {
+          "id": "timeSeriesTable",
+          "options": {}
+        },
         {
           "id": "seriesToColumns",
           "options": {
@@ -752,13 +787,24 @@
             "excludeByName": {
               "Time 1": true,
               "Time 2": true,
-              "Time 3": true
+              "Time 3": true,
+              "Value #B": true,
+              "Value #C": true
             },
-            "indexByName": {},
+            "indexByName": {
+              "Trend #95%ile": 3,
+              "Trend #errors %": 2,
+              "Trend #rps": 1,
+              "server": 0
+            },
             "renameByName": {
+              "Trend #95%ile": "95%ile",
+              "Trend #errors %": "errors %",
+              "Trend #rps": "rps",
               "Value #A": "95%ile",
               "Value #B": "rps",
               "Value #C": "errors",
+              "server": "service",
               "span_name": "operation"
             }
           }
@@ -808,6 +854,13 @@
               {
                 "id": "unit",
                 "value": "ms"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-yellow",
+                  "mode": "fixed"
+                }
               }
             ]
           },
@@ -820,6 +873,13 @@
               {
                 "id": "unit",
                 "value": "reqps"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-green",
+                  "mode": "fixed"
+                }
               }
             ]
           },
@@ -844,12 +904,19 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "errors"
+              "options": "errors %"
             },
             "properties": [
               {
                 "id": "unit",
-                "value": "reqps"
+                "value": "percentunit"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
               }
             ]
           }
@@ -859,7 +926,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 16
+        "y": 17
       },
       "id": 12,
       "options": {
@@ -884,10 +951,10 @@
           "editorMode": "code",
           "exemplar": true,
           "expr": "histogram_quantile(0.95, sum by (client, le) (rate(traces_service_graph_request_duration_seconds_bucket{server=\"$service\"}[5m])))",
-          "format": "table",
+          "format": "time_series",
           "legendFormat": "__auto",
           "range": true,
-          "refId": "A"
+          "refId": "95%ile"
         },
         {
           "datasource": {
@@ -896,11 +963,11 @@
           },
           "editorMode": "code",
           "expr": "sum by (client) (rate(traces_service_graph_request_total{server=\"$service\"}[5m]))",
-          "format": "table",
+          "format": "time_series",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
-          "refId": "B"
+          "refId": "rps"
         },
         {
           "datasource": {
@@ -908,16 +975,20 @@
             "uid": "webstore-metrics"
           },
           "editorMode": "code",
-          "expr": "sum by (client) (rate(traces_service_graph_request_total{server=\"$service\", failed=\"true\"}[5m])) or 0 * sum by (client) (rate(traces_service_graph_request_total{server=\"$service\"}[5m]))",
-          "format": "table",
+          "expr": "(sum by (client) (rate(traces_service_graph_request_total{server=\"$service\", failed=\"true\"}[5m])) or 0 * sum by (client) (rate(traces_service_graph_request_total{server=\"$service\"}[5m]))) / sum by (client) (rate(traces_service_graph_request_total{server=\"$service\"}[5m]))",
+          "format": "time_series",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
-          "refId": "C"
+          "refId": "errors %"
         }
       ],
       "title": "Upstream Services",
       "transformations": [
+        {
+          "id": "timeSeriesTable",
+          "options": {}
+        },
         {
           "id": "seriesToColumns",
           "options": {
@@ -933,8 +1004,16 @@
               "Time 2": true,
               "Time 3": true
             },
-            "indexByName": {},
+            "indexByName": {
+              "Trend #95%ile": 3,
+              "Trend #errors %": 2,
+              "Trend #rps": 1,
+              "client": 0
+            },
             "renameByName": {
+              "Trend #95%ile": "95%ile",
+              "Trend #errors %": "errors %",
+              "Trend #rps": "rps",
               "Value #A": "95%ile",
               "Value #B": "rps",
               "Value #C": "errors",
@@ -944,6 +1023,46 @@
         }
       ],
       "type": "table"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 25
+      },
+      "id": 14,
+      "panels": [
+        {
+          "datasource": {
+            "type": "jaeger",
+            "uid": "webstore-traces"
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 2
+          },
+          "id": 15,
+          "targets": [
+            {
+              "datasource": {
+                "type": "jaeger",
+                "uid": "webstore-traces"
+              },
+              "queryType": "search",
+              "refId": "A",
+              "service": "$service"
+            }
+          ],
+          "title": "jaeger traces",
+          "type": "traces"
+        }
+      ],
+      "title": "Traces",
+      "type": "row"
     }
   ],
   "refresh": "",
@@ -955,8 +1074,8 @@
       {
         "current": {
           "selected": false,
-          "text": "adservice",
-          "value": "adservice"
+          "text": "quoteservice",
+          "value": "quoteservice"
         },
         "datasource": {
           "type": "prometheus",
@@ -981,7 +1100,7 @@
       {
         "allValue": ".*",
         "current": {
-          "selected": true,
+          "selected": false,
           "text": [
             "All"
           ],
@@ -1019,6 +1138,6 @@
   "timezone": "",
   "title": "APM DEMO Service Details",
   "uid": "seCKIDf4k",
-  "version": 2,
+  "version": 12,
   "weekStart": ""
 }

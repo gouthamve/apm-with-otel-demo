@@ -168,12 +168,7 @@
           "show": false
         },
         "showHeader": true,
-        "sortBy": [
-          {
-            "desc": true,
-            "displayName": "errors %"
-          }
-        ]
+        "sortBy": []
       },
       "pluginVersion": "10.2.1",
       "targets": [
@@ -360,13 +355,13 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "APM DEMO Service List",
   "uid": "SgbGm7f4z",
-  "version": 3,
+  "version": 4,
   "weekStart": ""
 }
