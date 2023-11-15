@@ -38,6 +38,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -51,6 +52,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -112,7 +114,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.95, sum by (le) (rate(traces_span_metrics_duration_milliseconds_bucket{service_name=\"$service\", span_name=~\"$operation\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(traces_span_metrics_duration_milliseconds_bucket{service_name=\"$service\", span_name=~\"$operation\"}[5m])))",
           "legendFormat": "95%ile",
           "range": true,
           "refId": "A"
@@ -124,7 +126,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum by (le) (rate(traces_span_metrics_duration_milliseconds_bucket{service_name=\"$service\", span_name=~\"$operation\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.99, sum by (le) (rate(traces_span_metrics_duration_milliseconds_bucket{service_name=\"$service\", span_name=~\"$operation\"}[5m])))",
           "hide": false,
           "legendFormat": "99%ile",
           "range": true,
@@ -137,7 +139,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.50, sum by (le) (rate(traces_span_metrics_duration_milliseconds_bucket{service_name=\"$service\", span_name=~\"$operation\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.50, sum by (le) (rate(traces_span_metrics_duration_milliseconds_bucket{service_name=\"$service\", span_name=~\"$operation\"}[5m])))",
           "hide": false,
           "legendFormat": "50%ile",
           "range": true,
@@ -158,6 +160,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -171,6 +174,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -231,7 +235,7 @@
             "uid": "webstore-metrics"
           },
           "editorMode": "code",
-          "expr": "sum (rate(traces_span_metrics_calls_total{service_name=\"$service\", span_name=~\"$operation\"}[$__rate_interval]))",
+          "expr": "sum (rate(traces_span_metrics_calls_total{service_name=\"$service\", span_name=~\"$operation\"}[5m]))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -251,6 +255,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -264,6 +269,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -324,7 +330,7 @@
             "uid": "webstore-metrics"
           },
           "editorMode": "code",
-          "expr": "sum (rate(traces_span_metrics_calls_total{service_name=\"$service\", span_name=~\"$operation\", status_code=\"STATUS_CODE_ERROR\"}[$__rate_interval])) or 0 * sum (rate(traces_span_metrics_calls_total{service_name=\"$service\", span_name=~\"$operation\"}[$__rate_interval]))",
+          "expr": "sum (rate(traces_span_metrics_calls_total{service_name=\"$service\", span_name=~\"$operation\", status_code=\"STATUS_CODE_ERROR\"}[5m])) or 0 * sum (rate(traces_span_metrics_calls_total{service_name=\"$service\", span_name=~\"$operation\"}[5m]))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -375,6 +381,13 @@
               {
                 "id": "unit",
                 "value": "ms"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-yellow",
+                  "mode": "fixed"
+                }
               }
             ]
           },
@@ -387,6 +400,13 @@
               {
                 "id": "unit",
                 "value": "reqps"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-green",
+                  "mode": "fixed"
+                }
               }
             ]
           },
@@ -411,12 +431,19 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "errors"
+              "options": "errors %"
             },
             "properties": [
               {
                 "id": "unit",
-                "value": "reqps"
+                "value": "percentunit"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
               }
             ]
           }
@@ -430,6 +457,7 @@
       },
       "id": 8,
       "options": {
+        "cellHeight": "sm",
         "footer": {
           "countRows": false,
           "fields": "",
@@ -440,7 +468,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.2.1",
       "targets": [
         {
           "datasource": {
@@ -449,8 +477,8 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.95, sum by (span_name, le) (rate(traces_span_metrics_duration_milliseconds_bucket{service_name=\"$service\"}[$__rate_interval])))",
-          "format": "table",
+          "expr": "histogram_quantile(0.95, sum by (span_name, le) (rate(traces_span_metrics_duration_milliseconds_bucket{service_name=\"$service\"}[5m])))",
+          "format": "time_series",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -461,8 +489,8 @@
             "uid": "webstore-metrics"
           },
           "editorMode": "code",
-          "expr": "sum by (span_name) (rate(traces_span_metrics_calls_total{service_name=\"$service\"}[$__rate_interval]))",
-          "format": "table",
+          "expr": "sum by (span_name) (rate(traces_span_metrics_calls_total{service_name=\"$service\"}[5m]))",
+          "format": "time_series",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
@@ -474,8 +502,8 @@
             "uid": "webstore-metrics"
           },
           "editorMode": "code",
-          "expr": "sum by (span_name) (rate(traces_span_metrics_calls_total{service_name=\"$service\", status_code=\"STATUS_CODE_ERROR\"}[$__rate_interval])) or 0 * sum by (span_name) (rate(traces_span_metrics_calls_total{service_name=\"$service\"}[$__rate_interval]))",
-          "format": "table",
+          "expr": "(sum by (span_name) (rate(traces_span_metrics_calls_total{service_name=\"$service\", status_code=\"STATUS_CODE_ERROR\"}[5m])) or 0 * sum by (span_name) (rate(traces_span_metrics_calls_total{service_name=\"$service\"}[5m]))) / sum by (span_name) (rate(traces_span_metrics_calls_total{service_name=\"$service\"}[5m]))",
+          "format": "time_series",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
@@ -484,6 +512,10 @@
       ],
       "title": "Operations",
       "transformations": [
+        {
+          "id": "timeSeriesTable",
+          "options": {}
+        },
         {
           "id": "seriesToColumns",
           "options": {
@@ -498,8 +530,16 @@
               "Time 2": true,
               "Time 3": true
             },
-            "indexByName": {},
+            "indexByName": {
+              "Trend #A": 3,
+              "Trend #B": 1,
+              "Trend #C": 2,
+              "span_name": 0
+            },
             "renameByName": {
+              "Trend #A": "95%ile",
+              "Trend #B": "rps",
+              "Trend #C": "errors %",
               "Value #A": "95%ile",
               "Value #B": "rps",
               "Value #C": "errors",
@@ -539,7 +579,7 @@
             "uid": "webstore-loki"
           },
           "editorMode": "code",
-          "expr": "{job=\"opentelemetry-demo/adservice\"}",
+          "expr": "{job=~\"opentelemetry-demo/(adservice|recommendationservice)\"}",
           "queryType": "range",
           "refId": "A"
         }
@@ -644,6 +684,7 @@
       },
       "id": 11,
       "options": {
+        "cellHeight": "sm",
         "footer": {
           "countRows": false,
           "fields": "",
@@ -654,7 +695,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.2.1",
       "targets": [
         {
           "datasource": {
@@ -663,7 +704,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.95, sum by (server, le) (rate(traces_service_graph_request_duration_seconds_bucket{client=\"$service\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.95, sum by (server, le) (rate(traces_service_graph_request_duration_seconds_bucket{client=\"$service\"}[5m])))",
           "format": "table",
           "legendFormat": "__auto",
           "range": true,
@@ -675,7 +716,7 @@
             "uid": "webstore-metrics"
           },
           "editorMode": "code",
-          "expr": "sum by (server) (rate(traces_service_graph_request_total{client=\"$service\"}[$__rate_interval]))",
+          "expr": "sum by (server) (rate(traces_service_graph_request_total{client=\"$service\"}[5m]))",
           "format": "table",
           "hide": false,
           "legendFormat": "__auto",
@@ -688,7 +729,7 @@
             "uid": "webstore-metrics"
           },
           "editorMode": "code",
-          "expr": "sum by (server) (rate(traces_service_graph_request_total{client=\"$service\", failed=\"true\"}[$__rate_interval])) or 0 * sum by (server) (rate(traces_service_graph_request_total{client=\"$service\"}[$__rate_interval]))",
+          "expr": "sum by (server) (rate(traces_service_graph_request_total{client=\"$service\", failed=\"true\"}[5m])) or 0 * sum by (server) (rate(traces_service_graph_request_total{client=\"$service\"}[5m]))",
           "format": "table",
           "hide": false,
           "legendFormat": "__auto",
@@ -822,6 +863,7 @@
       },
       "id": 12,
       "options": {
+        "cellHeight": "sm",
         "footer": {
           "countRows": false,
           "fields": "",
@@ -832,7 +874,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.2.1",
       "targets": [
         {
           "datasource": {
@@ -841,7 +883,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.95, sum by (client, le) (rate(traces_service_graph_request_duration_seconds_bucket{server=\"$service\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.95, sum by (client, le) (rate(traces_service_graph_request_duration_seconds_bucket{server=\"$service\"}[5m])))",
           "format": "table",
           "legendFormat": "__auto",
           "range": true,
@@ -853,7 +895,7 @@
             "uid": "webstore-metrics"
           },
           "editorMode": "code",
-          "expr": "sum by (client) (rate(traces_service_graph_request_total{server=\"$service\"}[$__rate_interval]))",
+          "expr": "sum by (client) (rate(traces_service_graph_request_total{server=\"$service\"}[5m]))",
           "format": "table",
           "hide": false,
           "legendFormat": "__auto",
@@ -866,7 +908,7 @@
             "uid": "webstore-metrics"
           },
           "editorMode": "code",
-          "expr": "sum by (client) (rate(traces_service_graph_request_total{server=\"$service\", failed=\"true\"}[$__rate_interval])) or 0 * sum by (client) (rate(traces_service_graph_request_total{server=\"$service\"}[$__rate_interval]))",
+          "expr": "sum by (client) (rate(traces_service_graph_request_total{server=\"$service\", failed=\"true\"}[5m])) or 0 * sum by (client) (rate(traces_service_graph_request_total{server=\"$service\"}[5m]))",
           "format": "table",
           "hide": false,
           "legendFormat": "__auto",
@@ -907,15 +949,14 @@
   "refresh": "",
   "revision": 1,
   "schemaVersion": 38,
-  "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
         "current": {
           "selected": false,
-          "text": "checkoutservice",
-          "value": "checkoutservice"
+          "text": "adservice",
+          "value": "adservice"
         },
         "datasource": {
           "type": "prometheus",
@@ -971,13 +1012,13 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "APM DEMO Service Details",
   "uid": "seCKIDf4k",
-  "version": 4,
+  "version": 2,
   "weekStart": ""
 }

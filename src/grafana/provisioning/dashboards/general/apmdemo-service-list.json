@@ -64,12 +64,26 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "error %"
+              "options": "errors %"
             },
             "properties": [
               {
                 "id": "unit",
                 "value": "percentunit"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "gradientMode": "hue",
+                  "type": "sparkline"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
               }
             ]
           },
@@ -82,6 +96,19 @@
               {
                 "id": "unit",
                 "value": "ms"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "sparkline"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-yellow",
+                  "mode": "fixed"
+                }
               }
             ]
           },
@@ -101,6 +128,25 @@
                 ]
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "rps"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "reqps"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
@@ -112,6 +158,7 @@
       },
       "id": 2,
       "options": {
+        "cellHeight": "sm",
         "footer": {
           "countRows": false,
           "fields": "",
@@ -120,9 +167,15 @@
           ],
           "show": false
         },
-        "showHeader": true
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "errors %"
+          }
+        ]
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.2.1",
       "targets": [
         {
           "datasource": {
@@ -132,10 +185,10 @@
           "editorMode": "code",
           "exemplar": false,
           "expr": "sum by (service_name) (rate(traces_span_metrics_calls_total{service_name=~\"$service\", telemetry_sdk_language=~\"$lang\"}[$__rate_interval]))",
-          "format": "table",
-          "instant": true,
+          "format": "time_series",
+          "instant": false,
           "legendFormat": "__auto",
-          "range": false,
+          "range": true,
           "refId": "A"
         },
         {
@@ -146,11 +199,11 @@
           "editorMode": "code",
           "exemplar": false,
           "expr": "(sum by (service_name) (rate(traces_span_metrics_calls_total{service_name=~\"$service\", status_code=\"STATUS_CODE_ERROR\", telemetry_sdk_language=~\"$lang\"}[$__rate_interval])) or 0 * sum by (service_name) (rate(traces_span_metrics_calls_total{service_name=~\"$service\",telemetry_sdk_language=~\"$lang\"}[$__rate_interval])) ) / sum by (service_name) (rate(traces_span_metrics_calls_total{service_name=~\"$service\", telemetry_sdk_language=~\"$lang\"}[$__rate_interval]))",
-          "format": "table",
+          "format": "time_series",
           "hide": false,
-          "instant": true,
+          "instant": false,
           "legendFormat": "__auto",
-          "range": false,
+          "range": true,
           "refId": "B"
         },
         {
@@ -163,9 +216,9 @@
           "expr": "histogram_quantile(0.99, sum by (le, service_name) (rate(traces_span_metrics_duration_milliseconds_bucket{service_name=~\"$service\", telemetry_sdk_language=~\"$lang\"}[$__rate_interval])))",
           "format": "table",
           "hide": false,
-          "instant": true,
+          "instant": false,
           "legendFormat": "__auto",
-          "range": false,
+          "range": true,
           "refId": "C"
         },
         {
@@ -176,16 +229,24 @@
           "editorMode": "code",
           "exemplar": false,
           "expr": "count by (telemetry_sdk_language, service_name) (traces_span_metrics_calls_total{service_name=~\"$service\", telemetry_sdk_language=~\"$lang\"})",
-          "format": "table",
+          "format": "time_series",
           "hide": false,
-          "instant": true,
+          "instant": false,
           "legendFormat": "__auto",
-          "range": false,
+          "range": true,
           "refId": "D"
         }
       ],
       "title": "RED Method",
       "transformations": [
+        {
+          "id": "timeSeriesTable",
+          "options": {
+            "refIdToStat": {
+              "A": "lastNotNull"
+            }
+          }
+        },
         {
           "id": "seriesToColumns",
           "options": {
@@ -198,10 +259,10 @@
             "include": {
               "names": [
                 "service_name",
-                "Value #A",
-                "Value #B",
-                "Value #C",
-                "telemetry_sdk_language"
+                "Trend #A",
+                "Trend #B",
+                "telemetry_sdk_language",
+                "Trend #D"
               ]
             }
           }
@@ -218,6 +279,9 @@
               "telemetry_sdk_language": 1
             },
             "renameByName": {
+              "Trend #A": "rps",
+              "Trend #B": "errors %",
+              "Trend #D": "99%ile",
               "Value #A": "rps",
               "Value #B": "error %",
               "Value #C": "99%ile",
@@ -232,7 +296,6 @@
   "refresh": "10s",
   "revision": 1,
   "schemaVersion": 38,
-  "style": "dark",
   "tags": [],
   "templating": {
     "list": [
@@ -304,6 +367,6 @@
   "timezone": "",
   "title": "APM DEMO Service List",
   "uid": "SgbGm7f4z",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }

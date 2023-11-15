@@ -602,7 +602,7 @@ services:
 
   # Grafana
   grafana:
-    image: grafana/grafana:9.4.7
+    image: grafana/grafana:10.2.1
     container_name: grafana
     deploy:
       resources:
